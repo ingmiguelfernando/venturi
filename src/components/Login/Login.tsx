@@ -4,7 +4,7 @@ import Button from "@material-ui/core/Button";
 
 export const Login = () => {
   return (
-    <div className="bg-white opacity-95 w-96 h-96 rounded p-12">
+    <div className="bg-white opacity-95  h-96 rounded p-12">
       <h1 className="text-3xl opacity-100">Login</h1>
       <div className="text-center opacity-100">
         <div className="pt-6 py-4">
