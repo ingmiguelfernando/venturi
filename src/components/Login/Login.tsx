@@ -9,9 +9,12 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import { useUser } from "../../utils/auth/useUser";
 
 export const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const { user, errorMessage, logout, login, signIn } = useUser();
+
   // Email
   const [email, setEmail] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
@@ -24,7 +27,7 @@ export const Login = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   function ValidateEmail() {
-    const isValid = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email);
+    const isValid = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email);
     setIsValidEmail(isValid);
     setEmailMsgError(isValid ? "" : "Please enter a valid email.");
   }
@@ -35,8 +38,29 @@ export const Login = () => {
     setPasswordMsgError(
       isValid
         ? ""
-        : "Your password must contain minimum eight characters, at least one letter and one number"
+        : "Your password must contain minimum eight characters, at least one letter and one number."
     );
+  }
+
+  function AccesApp() {
+    debugger;
+    if (email === "" || !isValidEmail || password === "" || !isValidPassword) {
+      return;
+    }
+
+    if (isLogin) {
+      login(email, password).then(() => {
+        debugger;
+        console.log("inicio sesion");
+      });
+    }
+
+    if (!isLogin) {
+      signIn(email, password).then(() => {
+        debugger;
+        console.log("Creacion de usuario exitoso");
+      });
+    }
   }
 
   return (
@@ -89,7 +113,12 @@ export const Login = () => {
         <div
           className={cx({ "pt-8": isValidPassword, "pt-2": !isValidPassword })}
         >
-          <Button className="w-72 h-10" variant="contained" color="primary">
+          <Button
+            className="w-72 h-10"
+            variant="contained"
+            color="primary"
+            onClick={() => AccesApp()}
+          >
             {`${isLogin ? "Enter" : "Register"}`}
           </Button>
         </div>
