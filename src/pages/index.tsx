@@ -12,7 +12,7 @@ export default function Home() {
         <div className="bg-airplane bg-cover bg-right h-full bg-no-repeat "></div>
         <div
           id="logo"
-          className="bg-venturi-logo bg-contain bg-no-repeat w-60 h-32 inset-16 sm:inset-44 absolute"
+          className="bg-venturi-logo bg-contain bg-no-repeat w-60 h-32 inset-16 sm:inset-36 absolute"
         ></div>
         <div className="absolute top-36 w-full sm:top-60 sm:right-48 sm:w-96 ">
           {<Login />}
