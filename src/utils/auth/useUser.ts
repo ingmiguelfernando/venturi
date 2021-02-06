@@ -11,11 +11,16 @@ import {
 import { mapUserData, LocalUser } from './mapUserData'
 
 
+const VERIFY_EMAIL_MESSAGE = "Please verify your email address";
+
+
+
 initFirebase()
 
 const useUser = () => {
     const [user, setUser] = useState<LocalUser>()
     const [errorMessage, setErrorMessage] = useState("")
+    const [successMessage, setSuccessMessage] = useState("")
     const router = useRouter()
 
     const logout = async () => {
@@ -37,13 +42,17 @@ const useUser = () => {
             .signInWithEmailAndPassword(email, password)
             .then(async (response) => {
                 if (response.user === null) { return }
+
+                if (!response.user.emailVerified) {
+                    setSuccessMessage(VERIFY_EMAIL_MESSAGE)
+                    return
+                }
                 const userData = await mapUserData(response.user)
                 setUser(userData);
+                router.push('/home')
             })
             .catch((err) => {
-                debugger
-                console.log(err);
-                setErrorMessage(err);
+                setErrorMessage(err.message);
             })
     }
 
@@ -51,15 +60,13 @@ const useUser = () => {
         return firebase
             .auth()
             .createUserWithEmailAndPassword(email, password)
-            .then(async (response) => {
-                if (response.user === null) { return }
-                const userData = await mapUserData(response.user)
-                setUser(userData);
+            .then(async (_) => {
+                firebase.auth().currentUser?.sendEmailVerification().then(() =>
+                    setSuccessMessage(VERIFY_EMAIL_MESSAGE)
+                );
             })
             .catch((err) => {
-                debugger
-                console.log(err);
-                setErrorMessage(err);
+                setErrorMessage(err.message);
             })
     }
 
@@ -67,7 +74,6 @@ const useUser = () => {
         // Firebase updates the id token every hour, this
         // makes sure the react state and the cookie are
         // both kept up to date
-        debugger
         const cancelAuthListener = firebase
             .auth()
             .onIdTokenChanged(async (user) => {
@@ -94,7 +100,7 @@ const useUser = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    return { user, errorMessage, logout, login, signIn }
+    return { user, errorMessage, setErrorMessage, successMessage, setSuccessMessage, logout, login, signIn }
 }
 
 export { useUser }

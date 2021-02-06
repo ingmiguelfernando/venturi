@@ -1,6 +1,8 @@
 import { useState } from "react";
 import cx from "classnames";
 import TextField from "@material-ui/core/TextField";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
 import Button from "@material-ui/core/Button";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
@@ -13,7 +15,14 @@ import { useUser } from "../../utils/auth/useUser";
 
 export const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const { user, errorMessage, logout, login, signIn } = useUser();
+  const {
+    errorMessage,
+    setErrorMessage,
+    successMessage,
+    setSuccessMessage,
+    login,
+    signIn,
+  } = useUser();
 
   // Email
   const [email, setEmail] = useState("");
@@ -43,22 +52,17 @@ export const Login = () => {
   }
 
   function AccesApp() {
-    debugger;
     if (email === "" || !isValidEmail || password === "" || !isValidPassword) {
       return;
     }
 
     if (isLogin) {
-      login(email, password).then(() => {
-        debugger;
-        console.log("inicio sesion");
-      });
+      login(email, password);
     }
 
     if (!isLogin) {
       signIn(email, password).then(() => {
-        debugger;
-        console.log("Creacion de usuario exitoso");
+        setIsLogin(true);
       });
     }
   }
@@ -131,6 +135,20 @@ export const Login = () => {
           </Button>
         </div>
       </div>
+      <Snackbar
+        open={errorMessage !== ""}
+        onClose={() => setErrorMessage("")}
+        autoHideDuration={6000}
+      >
+        <Alert severity="error">{errorMessage}</Alert>
+      </Snackbar>
+      <Snackbar
+        open={successMessage !== ""}
+        onClose={() => setSuccessMessage("")}
+        autoHideDuration={6000}
+      >
+        <Alert severity="info">{successMessage}</Alert>
+      </Snackbar>
     </div>
   );
 };
