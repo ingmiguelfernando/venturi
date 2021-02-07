@@ -11,7 +11,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import { useUser } from "../../utils/auth/useUser";
+import { useAppContext } from "../../context";
 
 export const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -22,7 +22,7 @@ export const Login = () => {
     setSuccessMessage,
     login,
     signIn,
-  } = useUser();
+  } = useAppContext();
 
   // Email
   const [email, setEmail] = useState("");
