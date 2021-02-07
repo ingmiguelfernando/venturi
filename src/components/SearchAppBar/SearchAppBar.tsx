@@ -1,7 +1,9 @@
+import { useState } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
+import Popover from "@material-ui/core/Popover";
 import Image from "next/image";
 import InputBase from "@material-ui/core/InputBase";
 import { fade, makeStyles } from "@material-ui/core/styles";
@@ -13,6 +15,9 @@ const theme = createMuiTheme({
   palette: {
     primary: {
       main: "#000000",
+    },
+    secondary: {
+      main: "#FFFFFF",
     },
   },
   typography: { button: { textTransform: "capitalize" } },
@@ -75,6 +80,8 @@ const useStyles = makeStyles((theme) => ({
 
 export const SearchAppBar = () => {
   const classes = useStyles();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const id = isMenuOpen ? "simple-popover" : undefined;
 
   return (
     <ThemeProvider theme={theme}>
@@ -87,8 +94,30 @@ export const SearchAppBar = () => {
                 className={classes.menuButton}
                 color="inherit"
                 aria-label="open drawer"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
                 <MenuIcon />
+                <Popover
+                  id={id}
+                  open={isMenuOpen}
+                  anchorReference="anchorPosition"
+                  anchorPosition={{ top: 55, left: 10 }}
+                >
+                  <div className="bg-black h-28 w-60 block py-4 pl-4">
+                    <Button
+                      color="secondary"
+                      classes={{ root: classes.menuButton }}
+                    >
+                      Learning pathways
+                    </Button>
+                    <Button
+                      color="secondary"
+                      classes={{ root: classes.menuButton }}
+                    >
+                      Aircraft library
+                    </Button>
+                  </div>
+                </Popover>
               </IconButton>
             </div>
 
