@@ -9,7 +9,9 @@ import InputBase from "@material-ui/core/InputBase";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
+import AccountCircle from "@material-ui/icons/AccountCircle";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 
 const theme = createMuiTheme({
   palette: {
@@ -30,6 +32,15 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
+    backgroundColor: fade(theme.palette.common.black, 0.15),
+    "&:hover": {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+  },
+
+  menuButtonPopOver: {
+    margin: "3px",
+    width: "100%",
     backgroundColor: fade(theme.palette.common.black, 0.15),
     "&:hover": {
       backgroundColor: fade(theme.palette.common.white, 0.25),
@@ -103,16 +114,16 @@ export const SearchAppBar = () => {
                   anchorReference="anchorPosition"
                   anchorPosition={{ top: 55, left: 10 }}
                 >
-                  <div className="bg-black h-28 w-60 block py-4 pl-4">
+                  <div className="bg-black h-28 w-60 block p-4">
                     <Button
                       color="secondary"
-                      classes={{ root: classes.menuButton }}
+                      classes={{ root: classes.menuButtonPopOver }}
                     >
                       Learning pathways
                     </Button>
                     <Button
                       color="secondary"
-                      classes={{ root: classes.menuButton }}
+                      classes={{ root: classes.menuButtonPopOver }}
                     >
                       Aircraft library
                     </Button>
@@ -151,6 +162,42 @@ export const SearchAppBar = () => {
                 inputProps={{ "aria-label": "search" }}
               />
             </div>
+            <PopupState variant="popover" popupId="demo-popup-popover">
+              {(popupState) => (
+                <div>
+                  <IconButton
+                    edge="end"
+                    aria-label="account of current user"
+                    aria-haspopup="true"
+                    {...bindTrigger(popupState)}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                  <Popover
+                    {...bindPopover(popupState)}
+                    id="popover-user"
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                  >
+                    <div className="bg-black h-28 w-60 block p-4">
+                      <Button
+                        color="secondary"
+                        classes={{ root: classes.menuButtonPopOver }}
+                      >
+                        Sign out
+                      </Button>
+                    </div>
+                  </Popover>
+                </div>
+              )}
+            </PopupState>
           </Toolbar>
         </AppBar>
       </div>
