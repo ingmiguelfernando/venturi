@@ -12,6 +12,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
+import { useAppContext } from "../../context";
 
 const theme = createMuiTheme({
   palette: {
@@ -93,6 +94,7 @@ export const SearchAppBar = () => {
   const classes = useStyles();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const id = isMenuOpen ? "simple-popover" : undefined;
+  const { logout } = useAppContext();
 
   return (
     <ThemeProvider theme={theme}>
@@ -190,6 +192,7 @@ export const SearchAppBar = () => {
                       <Button
                         color="secondary"
                         classes={{ root: classes.menuButtonPopOver }}
+                        onClick={logout}
                       >
                         Sign out
                       </Button>

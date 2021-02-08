@@ -19,6 +19,7 @@ type initialState = {
   setErrorMessage: Dispatch<SetStateAction<string>>;
   setSuccessMessage: Dispatch<SetStateAction<string>>;
   login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
 };
 
@@ -35,6 +36,7 @@ export const AppContextProvider = ({ children }: IProps) => {
     setSuccessMessage,
     login,
     signIn,
+    logout,
   } = useUser();
 
   const values = React.useMemo(
@@ -45,6 +47,7 @@ export const AppContextProvider = ({ children }: IProps) => {
       successMessage,
       setSuccessMessage,
       login,
+      logout,
       signIn,
     }),
     [
@@ -54,6 +57,7 @@ export const AppContextProvider = ({ children }: IProps) => {
       successMessage,
       setSuccessMessage,
       login,
+      logout,
       signIn,
     ]
   );
