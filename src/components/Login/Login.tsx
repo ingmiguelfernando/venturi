@@ -118,9 +118,8 @@ export const Login = () => {
           className={cx({ "pt-8": isValidPassword, "pt-2": !isValidPassword })}
         >
           <Button
-            className="w-72 h-10"
+            className="w-72 h-10 bg-blue-700 text-white"
             variant="contained"
-            color="primary"
             onClick={() => AccesApp()}
           >
             {`${isLogin ? "Enter" : "Register"}`}
