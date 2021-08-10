@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { useCourse, Course } from "../../utils/dao/useCourse";
 import TextField from "@material-ui/core/TextField";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -6,7 +7,9 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import SaveIcon from "@material-ui/icons/Save";
 import Button from "@material-ui/core/Button";
 
-export const Courses = () => {
+export const Courses = ({ courseId }: { courseId: string }) => {
+  const router = useRouter();
+
   const [name, setName] = useState("");
   const [nameIsValid, setNameIsValid] = useState(true);
 
@@ -18,7 +21,24 @@ export const Courses = () => {
   const [thumbnail, setThumbnail] = useState("");
   const [thumbnailIsValid, setThumbnailIsValid] = useState(true);
 
-  const { createCourse } = useCourse();
+  const { createCourse, updateCourse, getCourse } = useCourse();
+
+  const goGridPage = () => router.push("/admin");
+
+  useEffect(() => {
+    if (courseId) {
+      const fetchCourse = async () => {
+        const { name, featured, description, imageUrl } = await getCourse(
+          courseId
+        );
+        setName(name);
+        setFeatured(featured);
+        setDescription(description);
+        setThumbnail(imageUrl);
+      };
+      fetchCourse();
+    }
+  }, [courseId]);
 
   const onSave = async () => {
     setNameIsValid(!!name);
@@ -35,15 +55,25 @@ export const Courses = () => {
       featured,
       imageUrl: thumbnail,
     };
-
-    await createCourse(course)
-      .then((op) => {
-        debugger;
-        console.log("saved:", op);
-      })
-      .catch((error) => {
-        console.log("error:", error);
-      });
+    if (courseId) {
+      course.id = courseId;
+      await updateCourse(course)
+        .then((op) => {
+          console.log("updated:", op);
+          goGridPage();
+        })
+        .catch((error) => {
+          console.log("error:", error);
+        });
+    } else {
+      await createCourse(course)
+        .then((op) => {
+          console.log("saved:", op);
+        })
+        .catch((error) => {
+          console.log("error:", error);
+        });
+    }
   };
 
   return (
@@ -83,6 +113,7 @@ export const Courses = () => {
         rows={4}
         style={{ marginTop: "20px" }}
         className="w-full"
+        value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
       <TextField
@@ -91,6 +122,7 @@ export const Courses = () => {
         label="Thumbnail Url"
         className="w-full"
         style={{ marginTop: "20px" }}
+        value={thumbnail}
         onChange={(e) => setThumbnail(e.target.value)}
       />
       <Button
@@ -109,6 +141,7 @@ export const Courses = () => {
         color="primary"
         size="large"
         style={{ marginTop: "20px", marginLeft: "20px" }}
+        onClick={goGridPage}
       >
         Cancel
       </Button>

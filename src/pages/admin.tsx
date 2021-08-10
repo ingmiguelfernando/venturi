@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SearchAppBar } from "../components/SearchAppBar";
-import { Courses } from "../components/Courses";
+import { Courses, CourseList } from "../components/Courses";
 import Head from "next/head";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
+import Container from "@material-ui/core/Container";
+import { useRouter } from "next/router";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -11,9 +13,14 @@ interface TabPanelProps {
   value: any;
 }
 
+type GridOperation = {
+  section: string;
+  operation: string;
+  id: string;
+};
+
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
-
   return (
     <div
       role="tabpanel"
@@ -49,9 +56,20 @@ function getTab(id: number, label: string) {
 
 export default function admin() {
   const [selectedTab, setSelectedTab] = useState(0);
+  const [gridOperation, setGridOperation] = useState<GridOperation | null>();
+  const router = useRouter();
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setSelectedTab(newValue);
   };
+
+  useEffect(() => {
+    const { s: section, o: operation, id } = router.query;
+    if (section && operation && id) {
+      setGridOperation({ section, operation, id } as GridOperation);
+    } else {
+      setGridOperation(null);
+    }
+  }, [router.query]);
 
   return (
     <>
@@ -61,7 +79,7 @@ export default function admin() {
           <title>Venturi</title>
           <link rel="icon" href="/venturi_logo.svg" />
         </Head>
-        <div className="flex w-11/12">
+        <Container className="flex w-11/12">
           <Tabs
             orientation="vertical"
             variant="scrollable"
@@ -82,7 +100,15 @@ export default function admin() {
             {getTab(2, "Segments")}
           </Tabs>
           <TabPanel value={selectedTab} index={0}>
-            <Courses />
+            <div className="pl-2">
+              {gridOperation &&
+              gridOperation.section === "c" &&
+              gridOperation.operation === "e" ? (
+                <Courses courseId={gridOperation.id} />
+              ) : (
+                <CourseList />
+              )}
+            </div>
           </TabPanel>
           <TabPanel value={selectedTab} index={1}>
             Item Two
@@ -90,7 +116,7 @@ export default function admin() {
           <TabPanel value={selectedTab} index={2}>
             tres
           </TabPanel>
-        </div>
+        </Container>
       </div>
     </>
   );
