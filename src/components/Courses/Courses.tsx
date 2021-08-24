@@ -7,7 +7,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import SaveIcon from "@material-ui/icons/Save";
 import Button from "@material-ui/core/Button";
 
-export const Courses = ({ courseId }: { courseId: string }) => {
+export const Courses = ({ courseId }: { courseId?: string }) => {
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -69,6 +69,7 @@ export const Courses = ({ courseId }: { courseId: string }) => {
       await createCourse(course)
         .then((op) => {
           console.log("saved:", op);
+          goGridPage();
         })
         .catch((error) => {
           console.log("error:", error);

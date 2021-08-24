@@ -15,14 +15,7 @@ import { useAppContext } from "../../context";
 
 export const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const {
-    errorMessage,
-    setErrorMessage,
-    successMessage,
-    setSuccessMessage,
-    login,
-    signIn,
-  } = useAppContext();
+  const { login, signIn } = useAppContext();
 
   // Email
   const [email, setEmail] = useState("");
@@ -134,20 +127,6 @@ export const Login = () => {
           </Button>
         </div>
       </div>
-      <Snackbar
-        open={errorMessage !== ""}
-        onClose={() => setErrorMessage("")}
-        autoHideDuration={6000}
-      >
-        <Alert severity="error">{errorMessage}</Alert>
-      </Snackbar>
-      <Snackbar
-        open={successMessage !== ""}
-        onClose={() => setSuccessMessage("")}
-        autoHideDuration={6000}
-      >
-        <Alert severity="info">{successMessage}</Alert>
-      </Snackbar>
     </div>
   );
 };

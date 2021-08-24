@@ -1,18 +1,24 @@
 import { useEffect, useState } from "react";
 import { useCourse, Course } from "../../utils/dao/useCourse";
 import { useRouter } from "next/router";
+import { useAppContext } from "../../context";
 
-import { withStyles, makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import { fade, withStyles, makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
-import IconButton from "@material-ui/core/IconButton";
+
+import {
+  Modal,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+} from "@material-ui/core";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -32,14 +38,46 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 700,
   },
-});
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paper: {
+    position: "absolute",
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  modalButtonPopOver: {
+    margin: "2px",
+    width: "30%",
+    backgroundColor: fade(theme.palette.common.black, 0.15),
+    "&:hover": {
+      backgroundColor: fade(theme.palette.common.black, 0.35),
+    },
+  },
+  cancelButtonSection: {
+    paddingTop: "10px",
+    display: "flex",
+    justifyContent: "center",
+  },
+}));
 
 export const CourseList = () => {
-  const { getCourses } = useCourse();
+  const [reloadForm, setReloadForm] = useState(0);
+  const { getCourses, deleteCourse } = useCourse();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { setSuccessMessage } = useAppContext();
+  const [CourseIdToDelete, setCourseIdToDelete] = useState<string | undefined>(
+    undefined
+  );
   const router = useRouter();
   const [courseList, setCourseList] = useState<Course[]>();
   const classes = useStyles();
@@ -50,7 +88,29 @@ export const CourseList = () => {
       setCourseList(result);
     };
     fetchCourses();
-  }, []);
+    setTimeout(() => {
+      //localhost:3000/admin?s=c&o=e
+      http: router.push("/admin?s=c&o=e");
+      console.log("ruteo");
+    }, 4000);
+  }, [reloadForm]);
+
+  const toogle = (courseId?: string) => {
+    setCourseIdToDelete(courseId);
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const onConfirmDelete = async () => {
+    if (CourseIdToDelete) {
+      await deleteCourse(CourseIdToDelete)
+        .then(() => {
+          setSuccessMessage("The course was deleted.");
+          toogle(undefined);
+          setReloadForm(reloadForm + 1);
+        })
+        .catch((error) => console.log(error));
+    }
+  };
 
   if (courseList && courseList.length > 0) {
     return (
@@ -67,7 +127,7 @@ export const CourseList = () => {
           </TableHead>
           <TableBody>
             {courseList.map((row) => (
-              <StyledTableRow key={row.name}>
+              <StyledTableRow key={row.id}>
                 <StyledTableCell component="th" scope="row">
                   {row.name}
                 </StyledTableCell>
@@ -93,7 +153,7 @@ export const CourseList = () => {
                   </IconButton>
                   <IconButton
                     aria-label="Delete"
-                    onClick={() => console.log("deleted")}
+                    onClick={() => toogle(row.id)}
                   >
                     <DeleteIcon />
                   </IconButton>
@@ -102,6 +162,27 @@ export const CourseList = () => {
             ))}
           </TableBody>
         </Table>
+        <Modal open={isModalOpen} className={classes.modal}>
+          <div className={classes.paper}>
+            <p>Are you sure do you want to delete the course ?</p>
+            <div className={classes.cancelButtonSection}>
+              <Button
+                color="secondary"
+                classes={{ root: classes.modalButtonPopOver }}
+                onClick={onConfirmDelete}
+              >
+                Accept
+              </Button>
+              <Button
+                color="secondary"
+                classes={{ root: classes.modalButtonPopOver }}
+                onClick={() => toogle(undefined)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </Modal>
       </TableContainer>
     );
   } else {

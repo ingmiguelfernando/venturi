@@ -104,7 +104,11 @@ export default function admin() {
               {gridOperation &&
               gridOperation.section === "c" &&
               gridOperation.operation === "e" ? (
-                <Courses courseId={gridOperation.id} />
+                gridOperation.id ? (
+                  <Courses courseId={gridOperation.id} />
+                ) : (
+                  <Courses />
+                )
               ) : (
                 <CourseList />
               )}

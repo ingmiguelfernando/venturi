@@ -28,7 +28,7 @@ export const AppContext = createContext<initialState>({} as initialState);
 
 //Provider
 export const AppContextProvider = ({ children }: IProps) => {
-  let {
+  const {
     user,
     errorMessage,
     setErrorMessage,

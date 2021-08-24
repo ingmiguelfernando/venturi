@@ -13,8 +13,6 @@ import { mapUserData, LocalUser } from './mapUserData'
 
 const VERIFY_EMAIL_MESSAGE = "Please verify your email address";
 
-
-
 initFirebase()
 
 const useUser = () => {

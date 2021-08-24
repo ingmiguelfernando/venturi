@@ -27,6 +27,14 @@ const useCourse = () => {
       });
   }
 
+  const deleteCourse = async (courseId: string) => {
+    return await courseRef
+      .doc(courseId)
+      .delete()
+      .then(() => (true))
+      .catch((error) => { console.error("Error updating the document: ", error); })
+  }
+
   const getCourses = async () => {
     let courses: Course[] = [];
     await courseRef.get()
@@ -54,7 +62,7 @@ const useCourse = () => {
       }) as Course;
   }
 
-  return { createCourse, updateCourse, getCourses, getCourse }
+  return { createCourse, updateCourse, deleteCourse, getCourses, getCourse }
 };
 
 export type Course = {
