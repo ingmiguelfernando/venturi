@@ -1,45 +1,43 @@
 import { useState } from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Button from "@material-ui/core/Button";
-import Popover from "@material-ui/core/Popover";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
+import Popover from "@mui/material/Popover";
 import Image from "next/image";
-import InputBase from "@material-ui/core/InputBase";
-import { fade, makeStyles } from "@material-ui/core/styles";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+import { styled, alpha } from "@mui/material/styles";
+import MenuIcon from "@mui/icons-material/Menu";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
 import { useAppContext } from "../../context";
 
-const useStyles = makeStyles((theme) => ({
+const Search = styled("div")(({ theme }) => ({
   root: {
     flexGrow: 1,
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    backgroundColor: fade(theme.palette.common.black, 0.15),
+    backgroundColor: alpha(theme.palette.common.black, 0.15),
     "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+      backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
   },
 
   menuButtonPopOver: {
     margin: "3px",
     width: "100%",
-    backgroundColor: fade(theme.palette.common.black, 0.15),
+    backgroundColor: alpha(theme.palette.common.black, 0.15),
     "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+      backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
   },
 
   search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
     "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+      backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
     marginLeft: 0,
     width: "100%",
@@ -63,8 +61,7 @@ const useStyles = makeStyles((theme) => ({
 
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("sm")]: {
@@ -77,41 +74,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const SearchAppBar = () => {
-  const classes = useStyles();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const id = isMenuOpen ? "simple-popover" : undefined;
   const { logout } = useAppContext();
 
   return (
-    <div className={classes.root}>
+    <div>
       <AppBar position="static">
         <Toolbar>
           <div className="md:hidden">
-            <IconButton
-              edge="start"
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="open drawer"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
+            <IconButton edge="start" color="inherit" aria-label="open drawer" onClick={() => setIsMenuOpen(!isMenuOpen)} size="large">
               <MenuIcon />
-              <Popover
-                id={id}
-                open={isMenuOpen}
-                anchorReference="anchorPosition"
-                anchorPosition={{ top: 55, left: 10 }}
-              >
+              <Popover id={id} open={isMenuOpen} anchorReference="anchorPosition" anchorPosition={{ top: 55, left: 10 }}>
                 <div className="bg-black h-28 w-60 block p-4 capitalize">
-                  <Button
-                    color="secondary"
-                    classes={{ root: classes.menuButtonPopOver }}
-                  >
+                  <Button color="secondary" classes={{}}>
                     Learning pathways
                   </Button>
-                  <Button
-                    color="secondary"
-                    classes={{ root: classes.menuButtonPopOver }}
-                  >
+                  <Button color="secondary" classes={{}}>
                     Aircraft library
                   </Button>
                 </div>
@@ -120,53 +99,20 @@ export const SearchAppBar = () => {
           </div>
 
           <div className="hidden md:flex">
-            <Image
-              src="/venturi_logo.png"
-              alt="logo"
-              layout="fixed"
-              width={260}
-              height={45}
-            />
+            <Image src="/venturi_logo.png" alt="logo" layout="fixed" width={260} height={45} />
           </div>
           <div className="ml-auto hidden md:flex">
-            <Button
-              color="inherit"
-              className="capitalize"
-              classes={{ root: classes.menuButton }}
-            >
+            <Button color="inherit" className="capitalize" classes={{}}>
               Learning pathways
             </Button>
-            <Button
-              color="inherit"
-              className="capitalize"
-              classes={{ root: classes.menuButton }}
-            >
+            <Button color="inherit" className="capitalize" classes={{}}>
               Aircraft library
             </Button>
-          </div>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
           </div>
           <PopupState variant="popover" popupId="demo-popup-popover">
             {(popupState) => (
               <div>
-                <IconButton
-                  edge="end"
-                  aria-label="account of current user"
-                  aria-haspopup="true"
-                  {...bindTrigger(popupState)}
-                  color="inherit"
-                >
+                <IconButton edge="end" aria-label="account of current user" {...bindTrigger(popupState)} color="inherit" size="large">
                   <AccountCircle />
                 </IconButton>
                 <Popover
@@ -182,11 +128,7 @@ export const SearchAppBar = () => {
                   }}
                 >
                   <div className="bg-black h-28 w-60 block p-4">
-                    <Button
-                      color="secondary"
-                      classes={{ root: classes.menuButtonPopOver }}
-                      onClick={logout}
-                    >
+                    <Button color="secondary" classes={{}} onClick={logout}>
                       Sign out
                     </Button>
                   </div>

@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useCourse, Course } from "../../utils/dao/useCourse";
-import TextField from "@material-ui/core/TextField";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import SaveIcon from "@material-ui/icons/Save";
-import Button from "@material-ui/core/Button";
+import TextField from "@mui/material/TextField";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import SaveIcon from "@mui/icons-material/Save";
+import Button from "@mui/material/Button";
 
 export const Courses = ({ courseId }: { courseId?: string }) => {
   const router = useRouter();

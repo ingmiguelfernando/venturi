@@ -3,27 +3,18 @@ import { useCourse, Course } from "../../utils/dao/useCourse";
 import { useRouter } from "next/router";
 import { useAppContext } from "../../context";
 
-import { fade, withStyles, makeStyles } from "@material-ui/core/styles";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
+import { alpha } from "@mui/material/styles";
+import withStyles from "@mui/styles/withStyles";
+import makeStyles from "@mui/styles/makeStyles";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
-import {
-  Modal,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Button,
-} from "@material-ui/core";
+import { Modal, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from "@mui/material";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
+    // backgroundColor: theme.palette.common.black,
+    // color: theme.palette.common.white,
   },
   body: {
     fontSize: 14,
@@ -32,9 +23,9 @@ const StyledTableCell = withStyles((theme) => ({
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
+    // "&:nth-of-type(odd)": {
+    //   backgroundColor: theme.palette.action.hover,
+    // },
   },
 }))(TableRow);
 
@@ -50,18 +41,18 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     position: "absolute",
     width: 400,
-    backgroundColor: theme.palette.background.paper,
+    //backgroundColor: theme.palette.background.paper,
     border: "2px solid #000",
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
+    // boxShadow: theme.shadows[5],
+    //padding: theme.spacing(2, 4, 3),
   },
   modalButtonPopOver: {
     margin: "2px",
     width: "30%",
-    backgroundColor: fade(theme.palette.common.black, 0.15),
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.black, 0.35),
-    },
+    // backgroundColor: alpha(theme.palette.common.black, 0.15),
+    // "&:hover": {
+    //   backgroundColor: alpha(theme.palette.common.black, 0.35),
+    // },
   },
   cancelButtonSection: {
     paddingTop: "10px",
@@ -75,9 +66,7 @@ export const CourseList = () => {
   const { getCourses, deleteCourse } = useCourse();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { setSuccessMessage } = useAppContext();
-  const [CourseIdToDelete, setCourseIdToDelete] = useState<string | undefined>(
-    undefined
-  );
+  const [CourseIdToDelete, setCourseIdToDelete] = useState<string | undefined>(undefined);
   const router = useRouter();
   const [courseList, setCourseList] = useState<Course[]>();
   const classes = useStyles();
@@ -88,11 +77,6 @@ export const CourseList = () => {
       setCourseList(result);
     };
     fetchCourses();
-    setTimeout(() => {
-      //localhost:3000/admin?s=c&o=e
-      http: router.push("/admin?s=c&o=e");
-      console.log("ruteo");
-    }, 4000);
   }, [reloadForm]);
 
   const toogle = (courseId?: string) => {
@@ -131,9 +115,7 @@ export const CourseList = () => {
                 <StyledTableCell component="th" scope="row">
                   {row.name}
                 </StyledTableCell>
-                <StyledTableCell align="center">
-                  {row.featured ? "Yes" : "No"}
-                </StyledTableCell>
+                <StyledTableCell align="center">{row.featured ? "Yes" : "No"}</StyledTableCell>
                 <StyledTableCell align="center">
                   <IconButton
                     aria-label="Edit"
@@ -141,20 +123,18 @@ export const CourseList = () => {
                     onClick={() => {
                       router.push(
                         {
-                          pathname: "/admin",
-                          query: { s: "c", o: "e", id: row.id },
+                          pathname: "/course",
+                          query: { id: row.id },
                         },
                         undefined,
                         { shallow: true }
                       );
                     }}
+                    size="large"
                   >
                     <EditIcon />
                   </IconButton>
-                  <IconButton
-                    aria-label="Delete"
-                    onClick={() => toogle(row.id)}
-                  >
+                  <IconButton aria-label="Delete" onClick={() => toogle(row.id)} size="large">
                     <DeleteIcon />
                   </IconButton>
                 </StyledTableCell>
@@ -166,18 +146,10 @@ export const CourseList = () => {
           <div className={classes.paper}>
             <p>Are you sure do you want to delete the course ?</p>
             <div className={classes.cancelButtonSection}>
-              <Button
-                color="secondary"
-                classes={{ root: classes.modalButtonPopOver }}
-                onClick={onConfirmDelete}
-              >
+              <Button color="secondary" classes={{ root: classes.modalButtonPopOver }} onClick={onConfirmDelete}>
                 Accept
               </Button>
-              <Button
-                color="secondary"
-                classes={{ root: classes.modalButtonPopOver }}
-                onClick={() => toogle(undefined)}
-              >
+              <Button color="secondary" classes={{ root: classes.modalButtonPopOver }} onClick={() => toogle(undefined)}>
                 Cancel
               </Button>
             </div>
