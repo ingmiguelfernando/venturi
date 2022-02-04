@@ -123,7 +123,7 @@ export const CourseList = () => {
                     onClick={() => {
                       router.push(
                         {
-                          pathname: "/course",
+                          pathname: "course/[id]",
                           query: { id: row.id },
                         },
                         undefined,

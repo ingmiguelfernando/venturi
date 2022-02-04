@@ -23,14 +23,12 @@ export const Courses = ({ courseId }: { courseId?: string }) => {
 
   const { createCourse, updateCourse, getCourse } = useCourse();
 
-  const goGridPage = () => router.push("/admin");
+  const goGridPage = () => router.push("/admin/courses");
 
   useEffect(() => {
     if (courseId) {
       const fetchCourse = async () => {
-        const { name, featured, description, imageUrl } = await getCourse(
-          courseId
-        );
+        const { name, featured, description, imageUrl } = await getCourse(courseId);
         setName(name);
         setFeatured(featured);
         setDescription(description);
@@ -78,32 +76,10 @@ export const Courses = ({ courseId }: { courseId?: string }) => {
   };
 
   return (
-    <form
-      className="bg-white m-10 p-10 w-full rounded-tr-3xl rounded-sm"
-      noValidate
-      autoComplete="off"
-    >
+    <form className="bg-white m-10 p-10 w-full rounded-tr-3xl rounded-sm" noValidate autoComplete="off">
       <div>
-        <TextField
-          error={!nameIsValid}
-          className="w-3/4"
-          id="name"
-          label="Course Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={featured}
-              onChange={(e) => setFeatured(e.target.checked)}
-              name="is-featured"
-              color="primary"
-            />
-          }
-          label="Featured"
-          className="pl-6"
-        />
+        <TextField error={!nameIsValid} className="w-3/4" id="name" label="Course Name" value={name} onChange={(e) => setName(e.target.value)} />
+        <FormControlLabel control={<Checkbox checked={featured} onChange={(e) => setFeatured(e.target.checked)} name="is-featured" color="primary" />} label="Featured" className="pl-6" />
       </div>
       <TextField
         id="description"
@@ -117,40 +93,15 @@ export const Courses = ({ courseId }: { courseId?: string }) => {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
-      <TextField
-        error={!thumbnailIsValid}
-        id="thumbnail-url"
-        label="Thumbnail Url"
-        className="w-full"
-        style={{ marginTop: "20px" }}
-        value={thumbnail}
-        onChange={(e) => setThumbnail(e.target.value)}
-      />
-      <Button
-        variant="contained"
-        className="bg-gray-800 text-white"
-        size="large"
-        startIcon={<SaveIcon />}
-        style={{ marginTop: "20px" }}
-        onClick={onSave}
-      >
+      <TextField error={!thumbnailIsValid} id="thumbnail-url" label="Thumbnail Url" className="w-full" style={{ marginTop: "20px" }} value={thumbnail} onChange={(e) => setThumbnail(e.target.value)} />
+      <Button variant="contained" className="bg-gray-800 text-white" size="large" startIcon={<SaveIcon />} style={{ marginTop: "20px" }} onClick={onSave}>
         Save
       </Button>
-      <Button
-        variant="contained"
-        className="bg-gray-800 text-white"
-        color="primary"
-        size="large"
-        style={{ marginTop: "20px", marginLeft: "20px" }}
-        onClick={goGridPage}
-      >
+      <Button variant="contained" className="bg-gray-800 text-white" color="primary" size="large" style={{ marginTop: "20px", marginLeft: "20px" }} onClick={goGridPage}>
         Cancel
       </Button>
 
-      <div
-        hidden={nameIsValid && descriptionIsValid && thumbnailIsValid}
-        className="text-red-500 font-light text-base pt-3"
-      >
+      <div hidden={nameIsValid && descriptionIsValid && thumbnailIsValid} className="text-red-500 font-light text-base pt-3">
         Please enter a value.
       </div>
     </form>
