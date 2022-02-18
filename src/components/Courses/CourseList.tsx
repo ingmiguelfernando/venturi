@@ -1,63 +1,35 @@
-import { useEffect, useState } from "react";
-import { useCourse, Course } from "../../utils/dao/useCourse";
 import { useRouter } from "next/router";
+import Dialog from "@mui/material/Dialog";
+import { useEffect, useState } from "react";
 import { useAppContext } from "../../context";
-
-import { alpha } from "@mui/material/styles";
 import withStyles from "@mui/styles/withStyles";
-import makeStyles from "@mui/styles/makeStyles";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogActions from "@mui/material/DialogActions";
+import { useCourse, Course } from "../../utils/dao/useCourse";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import { styled } from "@mui/material/styles";
 
-import { Modal, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from "@mui/material";
+import { IconButton, Table, TableBody, TableContainer, TableHead, TableRow, Paper, Button } from "@mui/material";
 
-const StyledTableCell = withStyles((theme) => ({
-  head: {
-    // backgroundColor: theme.palette.common.black,
-    // color: theme.palette.common.white,
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
   },
-  body: {
+  [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
   },
-}))(TableCell);
+}));
 
-const StyledTableRow = withStyles((theme) => ({
-  root: {
-    // "&:nth-of-type(odd)": {
-    //   backgroundColor: theme.palette.action.hover,
-    // },
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
   },
-}))(TableRow);
-
-const useStyles = makeStyles((theme) => ({
-  table: {
-    minWidth: 700,
-  },
-  modal: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  paper: {
-    position: "absolute",
-    width: 400,
-    //backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
-    // boxShadow: theme.shadows[5],
-    //padding: theme.spacing(2, 4, 3),
-  },
-  modalButtonPopOver: {
-    margin: "2px",
-    width: "30%",
-    // backgroundColor: alpha(theme.palette.common.black, 0.15),
-    // "&:hover": {
-    //   backgroundColor: alpha(theme.palette.common.black, 0.35),
-    // },
-  },
-  cancelButtonSection: {
-    paddingTop: "10px",
-    display: "flex",
-    justifyContent: "center",
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
   },
 }));
 
@@ -69,7 +41,6 @@ export const CourseList = () => {
   const [CourseIdToDelete, setCourseIdToDelete] = useState<string | undefined>(undefined);
   const router = useRouter();
   const [courseList, setCourseList] = useState<Course[]>();
-  const classes = useStyles();
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -99,7 +70,7 @@ export const CourseList = () => {
   if (courseList && courseList.length > 0) {
     return (
       <TableContainer style={{ width: "80%" }} component={Paper}>
-        <Table className={classes.table} aria-label="customized table">
+        <Table aria-label="customized table">
           <TableHead>
             <TableRow>
               <StyledTableCell>Name</StyledTableCell>
@@ -142,19 +113,15 @@ export const CourseList = () => {
             ))}
           </TableBody>
         </Table>
-        <Modal open={isModalOpen} className={classes.modal}>
-          <div className={classes.paper}>
-            <p>Are you sure do you want to delete the course ?</p>
-            <div className={classes.cancelButtonSection}>
-              <Button color="secondary" classes={{ root: classes.modalButtonPopOver }} onClick={onConfirmDelete}>
-                Accept
-              </Button>
-              <Button color="secondary" classes={{ root: classes.modalButtonPopOver }} onClick={() => toogle(undefined)}>
-                Cancel
-              </Button>
-            </div>
-          </div>
-        </Modal>
+        <Dialog open={isModalOpen} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+          <DialogTitle id="alert-dialog-title">{"Are you sure do you want to delete the course ?"}</DialogTitle>
+          <DialogActions>
+            <Button onClick={onConfirmDelete}>Accept</Button>
+            <Button onClick={() => toogle(undefined)} autoFocus>
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
       </TableContainer>
     );
   } else {
