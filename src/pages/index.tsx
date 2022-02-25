@@ -1,23 +1,55 @@
 import Head from "next/head";
-import { Login } from "../components/Login";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import React, { useState, useEffect } from "react";
+import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+
+import { getFirestore, collection } from "firebase/firestore";
+import { useCollection } from "react-firebase-hooks/firestore";
+import SignIn from "../components/SignIn";
+
+import { useAppDispatch } from "../app/hooks";
+import { showNotification, NotificationState } from "../features/notification-slice";
 
 export default function Home() {
+  const auth = getAuth();
+  const [user] = useAuthState(auth);
+  const dispatch = useAppDispatch();
+
+  const message: NotificationState = {
+    message: "Welcome to the app",
+    type: "info",
+  };
+
+  const login = () => {
+    signInWithEmailAndPassword(auth, "ing.miguel.fernando@gmail.com", "y5ab2JLTT4yJCv9");
+  };
+  const logout = () => {
+    signOut(auth);
+  };
+
+  const [value, loading, error] = useCollection(collection(getFirestore(), "course"), {
+    snapshotListenOptions: { includeMetadataChanges: true },
+  });
+
   return (
     <div>
-      <Head>
-        <title>Venturi</title>
-        <link rel="icon" href="/venturi_logo.svg" />
-      </Head>
-      <main className="h-screen bg-gradient-to-r from-black to-gray-500">
-        <div className="bg-airplane bg-cover bg-right h-full bg-no-repeat "></div>
-        <div
-          id="logo"
-          className="bg-venturi-logo bg-contain bg-no-repeat w-60 h-32 inset-16 sm:inset-36 absolute"
-        ></div>
-        <div className="absolute top-36 w-full sm:top-60 sm:right-48 sm:w-96 ">
-          {<Login />}
-        </div>
-      </main>
+      <SignIn />
+      <button onClick={() => dispatch(showNotification(message))}>show info notification</button>
+      <button
+        onClick={() =>
+          dispatch(
+            showNotification({
+              message: "error Message",
+              type: "error",
+              duration: 2000,
+            } as NotificationState)
+          )
+        }
+      >
+        show error notification
+      </button>
     </div>
   );
 }

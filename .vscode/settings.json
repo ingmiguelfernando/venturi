@@ -1,3 +1,8 @@
 {
-    "emmet.showSuggestionsAsSnippets": true
+    "cSpell.words": [
+        "bgcolor",
+        "firestore",
+        "fontsource",
+        "reduxjs"
+    ]
 }
