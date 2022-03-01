@@ -1,18 +1,15 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { ThemeProvider } from "@mui/material/styles";
-import theme from "../../theme";
+import { useForm } from "react-hook-form";
+import { ErrorMessage } from "../ErrorMessage";
+import { useUser } from "../../hooks/useUser";
 
 function Copyright(props: any) {
   return (
@@ -27,36 +24,53 @@ function Copyright(props: any) {
   );
 }
 
+interface FormInputs {
+  email: string;
+  password: string;
+}
+
 export default function SignIn() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const { user, signIn, signOut, createUser } = useUser();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormInputs>();
+  const [isLogin, setIsLogin] = useState(true);
+
+
+  const onSubmit = (data: FormInputs) => {
+    if (isLogin) {
+      signIn(data.email, data.password);
+    } else {
+      createUser(data.email, data.password);
+    };
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs" color="text.secondary">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
+    <Box
+      sx={{
+        marginTop: 8,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+      bgcolor="background.paper"
+    >
+      {user ? (<Typography variant="h6" component="span">{`Welcome back:${user.email}`}</Typography>) : (
+        <>
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            {`${isLogin ? "Login" : "Sign Up"} `}
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+            sx={{ mt: 1, marginX: "20px" }}
+          >
             <TextField
               margin="normal"
               required
@@ -66,7 +80,15 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                  message: "Email is invalid",
+                },
+              })}
             />
+            <ErrorMessage errors={errors} name="email" />
             <TextField
               margin="normal"
               required
@@ -76,30 +98,28 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              {...register("password", { required: "Password is required" })}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+            <ErrorMessage errors={errors} name="password" />
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-              Sign In
+              {`${isLogin ? "Enter" : "Register"}`}
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                {isLogin && <Link href="#" variant="body2">
                   Forgot password?
-                </Link>
+                </Link>}
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href="#" variant="body2" onClick={() => setIsLogin(!isLogin)}>
+                  {`${isLogin ? "Doesn't have account ?" : "I have my account"}`}
                 </Link>
               </Grid>
             </Grid>
           </Box>
-        </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
-      </Container>
-    </ThemeProvider>
+          <Copyright sx={{ mt: 8, mb: 4 }} />
+        </>)}
+      <button onClick={signOut}>Sign Out</button>
+    </Box>
   );
 }

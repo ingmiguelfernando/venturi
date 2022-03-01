@@ -3,6 +3,7 @@
         "bgcolor",
         "firestore",
         "fontsource",
+        "hookform",
         "reduxjs"
     ]
 }
