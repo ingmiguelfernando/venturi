@@ -1,55 +1,39 @@
 import Head from "next/head";
 import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import React, { useState, useEffect } from "react";
-import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { useAuthState } from "react-firebase-hooks/auth";
-
-import { getFirestore, collection } from "firebase/firestore";
-import { useCollection } from "react-firebase-hooks/firestore";
+import React from "react";
+import Box from '@mui/material/Box';
 import SignIn from "../components/SignIn";
+import Grid from '@mui/material/Grid'
 
-import { useAppDispatch } from "../app/hooks";
-import { showNotification, NotificationState } from "../features/notification-slice";
-
-export default function Home() {
-  const auth = getAuth();
-  const [user] = useAuthState(auth);
-  const dispatch = useAppDispatch();
-
-  const message: NotificationState = {
-    message: "Welcome to the app",
-    type: "info",
-  };
-
-  const login = () => {
-    signInWithEmailAndPassword(auth, "ing.miguel.fernando@gmail.com", "y5ab2JLTT4yJCv9");
-  };
-  const logout = () => {
-    signOut(auth);
-  };
-
-  const [value, loading, error] = useCollection(collection(getFirestore(), "course"), {
-    snapshotListenOptions: { includeMetadataChanges: true },
-  });
+export default function Index() {
 
   return (
-    <div>
-      <SignIn />
-      <button onClick={() => dispatch(showNotification(message))}>show info notification</button>
-      <button
-        onClick={() =>
-          dispatch(
-            showNotification({
-              message: "error Message",
-              type: "error",
-              duration: 2000,
-            } as NotificationState)
-          )
-        }
-      >
-        show error notification
-      </button>
-    </div>
+    <Grid
+      container
+      spacing={0}
+      direction="row"
+      justifyContent="flex-start"
+      alignItems="flex-start"
+      alignContent="stretch"
+      height="100vh"
+      wrap="wrap"
+      style={{
+        backgroundImage: `url('/airplane-background.png')`,
+        backgroundSize: 'cover', backgroundPosition: 'left', backgroundRepeat: 'no-repeat'
+      }}>
+      <Head>
+        <title>Venturi</title>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <Grid item xs={0} sm={6}>
+        <Box sx={{ p: 2 }}>
+          <Image src="/venturi_logo.png" alt="me" width={320} height={70} />
+        </Box>
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        <SignIn />
+      </Grid>
+    </Grid>
   );
 }

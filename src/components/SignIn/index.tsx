@@ -1,15 +1,15 @@
+import Box from "@mui/material/Box";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
 import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
 import { useForm } from "react-hook-form";
-import { ErrorMessage } from "../ErrorMessage";
 import { useUser } from "../../hooks/useUser";
+import { ErrorMessage } from "../ErrorMessage";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 function Copyright(props: any) {
   return (
@@ -30,7 +30,7 @@ interface FormInputs {
 }
 
 export default function SignIn() {
-  const { user, signIn, signOut, createUser } = useUser();
+  const { user, signIn, createUser, signOut } = useUser();
   const {
     register,
     handleSubmit,
@@ -50,10 +50,11 @@ export default function SignIn() {
   return (
     <Box
       sx={{
-        marginTop: 8,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        borderRadius: "45px 0px 0px 45px",
+        height: "100vh",
       }}
       bgcolor="background.paper"
     >
@@ -77,7 +78,6 @@ export default function SignIn() {
               fullWidth
               id="email"
               label="Email Address"
-              name="email"
               autoComplete="email"
               autoFocus
               {...register("email", {
@@ -93,7 +93,6 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
-              name="password"
               label="Password"
               type="password"
               id="password"
@@ -119,7 +118,6 @@ export default function SignIn() {
           </Box>
           <Copyright sx={{ mt: 8, mb: 4 }} />
         </>)}
-      <button onClick={signOut}>Sign Out</button>
     </Box>
   );
 }

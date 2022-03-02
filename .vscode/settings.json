@@ -4,6 +4,7 @@
         "firestore",
         "fontsource",
         "hookform",
-        "reduxjs"
+        "reduxjs",
+        "Swiper"
     ]
 }
