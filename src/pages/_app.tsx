@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { store } from "../app/store";
 import { Provider } from "react-redux";
 import firebase from "../firebase/clientApp";
-import { CacheProvider } from "@emotion/react";
+import { CacheProvider, EmotionCache } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import createEmotionCache from "../theme/createEmotionCache";
@@ -14,7 +14,7 @@ import { Notification } from "../components/Notification";
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 firebase;
-export default function MyApp(props) {
+export default function MyApp(props: { Component: any; emotionCache?: EmotionCache | undefined; pageProps: any; }) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
   return (

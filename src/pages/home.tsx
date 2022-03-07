@@ -3,7 +3,7 @@ import Image from "next/image";
 import React from "react";
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid'
-import { Container, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { FeaturedCourses } from "../components/FeaturedCourses";
 import { FeaturedCourseProps } from "../components/FeaturedCourses";
 
