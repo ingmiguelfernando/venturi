@@ -40,6 +40,7 @@ export default function SignIn() {
 
 
 
+
   const onSubmit = (data: FormInputs) => {
     if (isLogin) {
       signIn(data.email, data.password);
@@ -56,6 +57,7 @@ export default function SignIn() {
         alignItems: "center",
         borderRadius: "45px 0px 0px 45px",
         height: "100vh",
+        background: `url('/bg_1.gif') repeat scroll 0 0 transparent`
       }}
       bgcolor="background.paper"
     >
