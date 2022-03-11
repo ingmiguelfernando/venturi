@@ -1,15 +1,16 @@
 import Head from "next/head";
 import theme from "../theme";
 import * as React from "react";
+import "../styles/globals.css";
 import PropTypes from "prop-types";
 import { store } from "../app/store";
 import { Provider } from "react-redux";
 import firebase from "../firebase/clientApp";
-import { CacheProvider, EmotionCache } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
-import createEmotionCache from "../theme/createEmotionCache";
 import { Notification } from "../components/Notification";
+import { CacheProvider, EmotionCache } from "@emotion/react";
+import createEmotionCache from "../theme/createEmotionCache";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
