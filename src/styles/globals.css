@@ -14,7 +14,3 @@ a {
 * {
   box-sizing: border-box;
 }
-
-.rounded-image {
-  border-radius: 8% !important;
-}

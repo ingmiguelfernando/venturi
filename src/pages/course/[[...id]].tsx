@@ -70,8 +70,7 @@ const EditCourse = () => {
         <Box position="relative" height="100%" alignItems="center" display="flex">
           <CourseTitle>
             <Typography fontWeight={600} variant="h2" color="white">
-              {" "}
-              {course.name}{" "}
+              {course.name}
             </Typography>
           </CourseTitle>
         </Box>
