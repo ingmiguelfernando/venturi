@@ -1,0 +1,10 @@
+{
+  "name": "firebase-emulator",
+  "version": "1.0.0",
+  "description": "firebase emulator folder",
+  "scripts": {
+    "start": "firebase emulators:start --import ./data --export-on-exit"
+  },
+  "author": "",
+  "license": "ISC"
+}

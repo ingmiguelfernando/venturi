@@ -15,7 +15,6 @@ export const useCourse = () => {
   const db = getFirestore(auth.app);
 
   const getCourse = async (id: string) => {
-    console.log("--getCourse--");
     try {
       const docRef = doc(db, COLLECTION_NAME, id);
       const docSnap = await getDoc(docRef);

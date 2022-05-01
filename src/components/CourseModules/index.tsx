@@ -10,7 +10,7 @@ interface TabsAndPanels {
 
 export const CourseModules = ({ courseId }: { courseId: string | null }) => {
   const { getModulesByCourseId } = useModule();
-  const [modules, setModules] = useState<Modules[]>([]);
+  const [modules, setModules] = useState<Modules[] | null>(null);
   const [value, setValue] = React.useState(0);
 
   let tabsAndPanels: TabsAndPanels = {
@@ -23,7 +23,7 @@ export const CourseModules = ({ courseId }: { courseId: string | null }) => {
   };
 
   useEffect(() => {
-    if (courseId !== null) {
+    if (courseId !== null && !modules) {
       (async () => {
         const modules = await getModulesByCourseId(courseId);
         if (modules && modules.length > 0) {
@@ -31,7 +31,7 @@ export const CourseModules = ({ courseId }: { courseId: string | null }) => {
         }
       })();
     }
-  }, [courseId, getModulesByCourseId]);
+  }, [courseId, getModulesByCourseId, modules]);
 
   if (modules && modules.length > 0) {
     modules.forEach((module, index) => {
