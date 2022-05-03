@@ -1,13 +1,20 @@
 import { getAuth } from "firebase/auth";
 import { collection, getFirestore, query, where, getDocs } from "firebase/firestore";
+import { omit, orderBy } from "lodash";
 
 const COLLECTION_NAME = "modules";
+
+type Sequence = {
+  id: string;
+  order: number;
+};
 
 export type Modules = {
   name: string;
   imageUrl: string;
   description: string;
   coursesIds: string[];
+  order: number;
 };
 
 export const useModule = () => {
@@ -21,9 +28,10 @@ export const useModule = () => {
       const querySnapshot = await getDocs(q);
       let modules: Modules[] = [];
       querySnapshot.forEach((doc) => {
-        modules.push(doc.data() as Modules);
+        const sequence = doc.data().sequence.find((s: Sequence) => s.id === courseId)?.order ?? 1;
+        modules.push(omit({ ...doc.data(), order: sequence }, ["sequence"]) as Modules);
       });
-      return modules;
+      return orderBy(modules, ["order"], ["asc"]);
     } catch (error) {
       console.log(error);
     }
