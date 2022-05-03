@@ -11,7 +11,7 @@ interface TabsAndPanels {
 export const CourseModules = ({ courseId }: { courseId: string | null }) => {
   const { getModulesByCourseId } = useModule();
   const [modules, setModules] = useState<Modules[] | null>(null);
-  const [value, setValue] = React.useState(0);
+  const [selectedTab, setSelectedTab] = React.useState(0);
 
   let tabsAndPanels: TabsAndPanels = {
     tabs: [],
@@ -19,7 +19,7 @@ export const CourseModules = ({ courseId }: { courseId: string | null }) => {
   };
 
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+    setSelectedTab(newValue);
   };
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export const CourseModules = ({ courseId }: { courseId: string | null }) => {
       tabsAndPanels.panels.push(
         <TabPanel
           key={index}
-          value={value}
+          value={selectedTab}
           index={index}
           picture={module.imageUrl}
           description={module.description}
@@ -73,7 +73,7 @@ export const CourseModules = ({ courseId }: { courseId: string | null }) => {
           display: { xs: "inline", sm: "flex" },
         }}
       >
-        <CustomTabs value={value} onChange={handleChange}>
+        <CustomTabs value={selectedTab} onChange={handleChange}>
           {tabsAndPanels.tabs}
         </CustomTabs>
         <Box

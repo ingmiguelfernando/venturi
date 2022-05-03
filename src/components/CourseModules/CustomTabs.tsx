@@ -8,7 +8,6 @@ import BlurOnIcon from "@mui/icons-material/BlurOn";
 import { lime } from "@mui/material/colors";
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
-import { EnrolButton } from "../EnrolButton";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -32,17 +31,7 @@ export const CustomTabs = styled((props: TabsProps) => {
       {...props}
     />
   );
-})(({ theme }) => ({
-  // border: `1px solid ${theme.palette.grey[600]}`,
-  // "&:not(:last-child)": {
-  //   borderBottom: 0,
-  // },
-  // "&:before": {
-  //   display: "none",
-  // },
-  // borderLeft: "none",
-  // borderRight: "none",
-}));
+})``;
 
 export const CustomTab = styled((props: TabProps) => (
   <Tab icon={<BlurOnIcon sx={{ color: lime[900], width: "20%" }} />} {...props} />
@@ -103,7 +92,6 @@ export const TabPanel = (props: TabPanelProps) => {
           <Typography variant="body1" component="article" paddingTop={1} color="secondary" pb={3}>
             {description}
           </Typography>
-          <EnrolButton />
         </Box>
       )}
     </div>

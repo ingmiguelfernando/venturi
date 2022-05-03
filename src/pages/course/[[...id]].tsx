@@ -9,6 +9,7 @@ import { Typography } from "@mui/material";
 import Image from "next/image";
 import { styled } from "@mui/material/styles";
 import { CourseModules } from "../../components/CourseModules";
+import { EnrolButton } from "../../components/EnrolButton";
 
 const CourseTitle = styled("div")(({ theme }) => ({
   position: "absolute",
@@ -77,6 +78,7 @@ const EditCourse = () => {
       </Grid>
       <Grid item sm={12}>
         <CourseModules courseId={courseId} />
+        <EnrolButton />
       </Grid>
     </Grid>
   ) : (
