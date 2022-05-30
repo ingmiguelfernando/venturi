@@ -1,5 +1,7 @@
-import { getAuth } from "firebase/auth";
-import { query, where, collection, getDocs, getFirestore, limit } from "firebase/firestore";
+import { query, where, collection, getDocs, limit } from "firebase/firestore";
+import { auth, db } from "../firebase/clientApp";
+import { useDispatch } from "react-redux";
+import { setLearn } from "../features/selectedCourse-slice";
 
 const COLLECTION_NAME = "learns";
 
@@ -15,17 +17,17 @@ type Module = {
 };
 
 export type Learn = {
+  id: string;
   courseId: string;
   userId: string;
   modules: Module[];
 };
 
 export const useLearn = () => {
-  const auth = getAuth();
-  const db = getFirestore(auth.app);
   const docRef = collection(db, COLLECTION_NAME);
+  const dispatch = useDispatch();
 
-  const hasLearn = async (courseId: string) => {
+  const getLearnByCourseId = async (courseId: string) => {
     try {
       const q = query(
         docRef,
@@ -33,11 +35,16 @@ export const useLearn = () => {
         where("userId", "==", auth.currentUser?.uid),
         limit(1)
       );
-      const querySnapshot = (await getDocs(q)).size;
-      return querySnapshot > 0;
+      let learns: Learn[] = [];
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        learns.push({ ...doc.data(), id: doc.id } as Learn);
+      });
+      dispatch(setLearn(learns[0] ?? null));
+      return learns;
     } catch (error) {
       console.log(error);
     }
   };
-  return { hasLearn };
+  return { getLearnByCourseId };
 };

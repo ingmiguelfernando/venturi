@@ -1,5 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 let clientCredentials = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -12,9 +13,10 @@ let clientCredentials = {
 
 const firebase = getApps().length === 0 ? initializeApp(clientCredentials) : getApp();
 
+export default firebase;
+export const auth = getAuth();
+export const db = getFirestore(firebase);
+
 if (process.env.NEXT_PUBLIC_ENVIRONMENT === "development") {
-  const db = getFirestore();
   connectFirestoreEmulator(db, "localhost", 8080);
 }
-
-export default firebase;

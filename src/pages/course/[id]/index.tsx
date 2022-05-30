@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { Course, useCourse } from "../../hooks/useCourse";
+import { Course, useCourse } from "../../../hooks/useCourse";
 import Head from "next/head";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -8,8 +8,8 @@ import { Typography } from "@mui/material";
 
 import Image from "next/image";
 import { styled } from "@mui/material/styles";
-import { CourseModules } from "../../components/CourseModules";
-import { EnrolButton } from "../../components/EnrolButton";
+import { CourseModules } from "../../../components/CourseModules";
+import { EnrolButton } from "../../../components/EnrolButton";
 
 const CourseTitle = styled("div")(({ theme }) => ({
   position: "absolute",
@@ -32,7 +32,7 @@ const EditCourse = () => {
   const router = useRouter();
   const { getCourse } = useCourse();
   const [course, setCourse] = useState<Course | null>(null);
-  const courseId = router.query.id ? router.query.id[0] : null;
+  const courseId = router.query.id?.toString() ?? null;
 
   useEffect(() => {
     if (courseId && !course) {

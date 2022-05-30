@@ -1,6 +1,6 @@
 import { Typography, Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useModule, Modules } from "../../hooks/useModule";
+import { useModule, Module } from "../../hooks/useModule";
 import { CustomTabs, CustomTab, TabPanel, a11yProps } from "./CustomTabs";
 
 interface TabsAndPanels {
@@ -10,7 +10,7 @@ interface TabsAndPanels {
 
 export const CourseModules = ({ courseId }: { courseId: string | null }) => {
   const { getModulesByCourseId } = useModule();
-  const [modules, setModules] = useState<Modules[] | null>(null);
+  const [modules, setModules] = useState<Module[] | null>(null);
   const [selectedTab, setSelectedTab] = React.useState(0);
 
   let tabsAndPanels: TabsAndPanels = {
