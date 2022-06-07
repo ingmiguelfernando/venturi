@@ -1,15 +1,15 @@
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { Course, useCourse } from "../../../hooks/useCourse";
 import Head from "next/head";
+import Image from "next/image";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 import { Typography } from "@mui/material";
-
-import Image from "next/image";
 import { styled } from "@mui/material/styles";
-import { CourseModules } from "../../../components/CourseModules";
 import { EnrolButton } from "../../../components/EnrolButton";
+import { CourseModules } from "../../../components/CourseModules";
+import { getCourse } from "../../../features/async-thunks";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 
 const CourseTitle = styled("div")(({ theme }) => ({
   position: "absolute",
@@ -30,20 +30,17 @@ const CourseTitle = styled("div")(({ theme }) => ({
 
 const EditCourse = () => {
   const router = useRouter();
-  const { getCourse } = useCourse();
-  const [course, setCourse] = useState<Course | null>(null);
+  const dispatch = useAppDispatch();
   const courseId = router.query.id?.toString() ?? null;
+  const course = useAppSelector((state) => state.selectedCourse.course);
 
   useEffect(() => {
     if (courseId && !course) {
       (async () => {
-        const course = await getCourse(courseId);
-        if (course) {
-          setCourse(course);
-        }
+        dispatch(getCourse(courseId));
       })();
     }
-  }, [course, courseId, getCourse]);
+  }, [course, courseId, dispatch]);
 
   return course ? (
     <Grid container display="inline">

@@ -1,6 +1,7 @@
 import { Typography, Box } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useModule, Module } from "../../hooks/useModule";
+import React, { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { getModulesByCourseId } from "../../features/async-thunks";
 import { CustomTabs, CustomTab, TabPanel, a11yProps } from "./CustomTabs";
 
 interface TabsAndPanels {
@@ -9,8 +10,9 @@ interface TabsAndPanels {
 }
 
 export const CourseModules = ({ courseId }: { courseId: string | null }) => {
-  const { getModulesByCourseId } = useModule();
-  const [modules, setModules] = useState<Module[] | null>(null);
+  const dispatch = useAppDispatch();
+  const modules = useAppSelector((state) => state.selectedCourse.modules);
+
   const [selectedTab, setSelectedTab] = React.useState(0);
 
   let tabsAndPanels: TabsAndPanels = {
@@ -25,13 +27,10 @@ export const CourseModules = ({ courseId }: { courseId: string | null }) => {
   useEffect(() => {
     if (courseId !== null && !modules) {
       (async () => {
-        const modules = await getModulesByCourseId(courseId);
-        if (modules && modules.length > 0) {
-          setModules(modules);
-        }
+        dispatch(getModulesByCourseId(courseId));
       })();
     }
-  }, [courseId, getModulesByCourseId, modules]);
+  }, [courseId, dispatch, modules]);
 
   if (modules && modules.length > 0) {
     modules.forEach((module, index) => {

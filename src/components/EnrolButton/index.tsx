@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import AddModeratorOutlinedIcon from "@mui/icons-material/AddModeratorOutlined";
 import PlayCircleFilledWhiteOutlinedIcon from "@mui/icons-material/PlayCircleFilledWhiteOutlined";
 import Fab from "@mui/material/Fab";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
-import { useLearn } from "../../hooks/useLearn";
+
 import { useRouter } from "next/router";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { getLearnByCourseId } from "../../features/async-thunks";
 
 export const EnrolButton = () => {
   const router = useRouter();
-  const { getLearnByCourseId } = useLearn();
+  const dispatch = useAppDispatch();
+
   const learnId = useAppSelector((state) => state.selectedCourse?.learn?.id ?? false);
+  const hasAnyLearn = useAppSelector((state) => state.selectedCourse?.learn);
   const courseId = router.query.id?.toString() ?? null;
-  const [hasAnyLearn, setHasAnyLearn] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
     if (courseId && hasAnyLearn === undefined) {
       (async () => {
-        const response = await getLearnByCourseId(courseId);
-        setHasAnyLearn(response && response.length > 0);
+        dispatch(getLearnByCourseId(courseId));
       })();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courseId]);
+  }, [courseId, dispatch, hasAnyLearn]);
 
   return (
     <Box position={"fixed"} bottom={16} right={{ xs: "calc(50% - 125px)", sm: 28 }} zIndex={1}>
