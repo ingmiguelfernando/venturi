@@ -12,16 +12,16 @@ export interface CourseContentProps {
   learn?: Learn;
 }
 
+const isSegmentDone = (moduleId: string, segmentId: string, learn: Learn) => {
+  const currentModule = learn?.modules.find((m) => m.moduleId === moduleId);
+  const currentSegment = currentModule?.segments.find((s) => s.segmentId === segmentId);
+  return currentSegment ? currentSegment.done : false;
+};
+
 export const CourseContent = ({ modules, segments, learn }: CourseContentProps) => {
   const moduleDescription = "Section 1: Let's Dive in";
-  const progress = "11/14";
+  const progress = "14";
   const duration = "58 min";
-
-  const isSegmentDone = (moduleId: string, segmentId: string) => {
-    const currentModule = learn?.modules.find((m) => m.moduleId === moduleId);
-    const currentSegment = currentModule?.segments.find((s) => s.segmentId === segmentId);
-    return currentSegment ? currentSegment.done : false;
-  };
 
   return (
     <Box>
@@ -43,7 +43,7 @@ export const CourseContent = ({ modules, segments, learn }: CourseContentProps) 
                 <Typography
                   fontWeight={200}
                   fontSize={14}
-                >{`${progress} | ${duration}`}</Typography>
+                >{`${segments.length}/${progress} | ${duration}`}</Typography>
               </Box>
             </AccordionSummary>
             {segments
@@ -61,7 +61,7 @@ export const CourseContent = ({ modules, segments, learn }: CourseContentProps) 
                     cursor: "pointer",
                   }}
                 >
-                  <Checkbox checked={isSegmentDone(module.id, segment.id)} />
+                  <Checkbox checked={isSegmentDone(module.id, segment.id, learn!)} />
                   <Typography>{segment.name}</Typography>
                 </AccordionDetails>
               ))}

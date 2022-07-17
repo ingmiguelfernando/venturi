@@ -4,6 +4,7 @@ export type Segment = {
   id: string;
   name: string;
   videoUrl: string;
+  duration: string;
   order: number;
   moduleId: string[];
   sequence?: Sequence[];
